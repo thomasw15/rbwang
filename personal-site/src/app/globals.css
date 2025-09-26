@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 255 255 255;
+  --fg: 0 0 0;
+}
+
+html, body, :root {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-black antialiased;
+  background-color: rgb(var(--bg));
+}
+
+.grid-bg {
+  background-image: none;
+}
+
+.focus-ring {
+  @apply outline-none ring-2 ring-black ring-offset-2 ring-offset-white;
+}
+
+a {
+  @apply text-black hover:text-gray-600 transition-colors;
+}
+
+.container-px {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+

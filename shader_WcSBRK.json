@@ -1,0 +1,77 @@
+{
+ "ver": "0.1",
+ "info": {
+  "id": "WcSBRK",
+  "date": "1758769949",
+  "viewed": 1,
+  "name": "Ordinary vs Cesaro",
+  "description": "sum comparison",
+  "likes": 0,
+  "published": "Public API",
+  "usePreview": 0,
+  "tags": [
+   "sum"
+  ],
+  "hasliked": 0,
+  "parentid": "",
+  "parentname": ""
+ },
+ "renderpass": [
+  {
+   "inputs": [
+    {
+     "id": "4dXGR8",
+     "filepath": "/media/previz/buffer00.png",
+     "type": "buffer",
+     "channel": 0,
+     "sampler": {
+      "filter": "linear",
+      "wrap": "clamp",
+      "vflip": "true",
+      "srgb": "false",
+      "internal": "byte"
+     },
+     "published": 1
+    }
+   ],
+   "outputs": [
+    {
+     "id": "4dfGRr",
+     "channel": 0
+    }
+   ],
+   "code": "// IMAGE — overlays moving dots; centered/zoomed; smooth saturated colors\n// Reads trails from iChannel0 (Buffer A)\n\n#define SPEED         10.0\n#define RESTART_SEC    8.0\n#define ZOOM           4.0\n#define D              1\n#define SEED         123.0\n#define DOT_RAW_PX     3.0\n#define DOT_CES_PX     3.6\n#define ANGLE_EPS    0.002\n#define AUTO_SCALE       1\n#define COLOR_RATE     0.18\n\n// palette tuning (match Buffer A)\n#define SAT_BOOST      0.75\n#define VAL_SCALE      0.52\n#define GAMMA          1.08\n\nfloat h1(float x){ return fract(sin(x)*43758.5453123); }\n\nvoid toWorld(vec2 fragCoord, out vec2 p, out float px){\n    vec2 R=iResolution.xy; float s=min(R.x,R.y), W=2.2;\n    vec2 c0=0.5*R; p=((fragCoord-c0)/s)*(2.0*W); px=(2.0*W)/s;\n}\n\nvec2 cmul(vec2 a, vec2 b){ return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x); }\nvec2 csub(vec2 a, vec2 b){ return a - b; }\nvec2 cdiv(vec2 a, vec2 b){\n    float d=dot(b,b);\n    return vec2((a.x*b.x + a.y*b.y)/d, (a.y*b.x - a.x*b.y)/d);\n}\nvec2 zpow_polar(float r, float th, float k){ float rk=pow(r,k), a=k*th; return rk*vec2(cos(a),sin(a)); }\n\nvec2 sampleZ(int j, float epochShift, out float r, out float th){\n    float s=SEED + epochShift + float(j)*19.19; float u=h1(s+5.91);\n    th=6.28318530718*u; if(abs(sin(0.5*th))<ANGLE_EPS) th += 2.0*ANGLE_EPS;\n    r=1.0; return vec2(cos(th), sin(th));\n}\nvec2 cesaroLimit(vec2 z){ return cdiv(z, csub(vec2(1.0,0.0), z)); }\n\nvoid centerAndScale(float epochShift, out vec2 C, out float S){\n    C=vec2(0.0); float maxR=1.0;\n    for(int j=0;j<D;++j){\n        float r, th; vec2 z=sampleZ(j, epochShift, r, th);\n        C += cesaroLimit(z);\n        float R = 1.0 / max(length(csub(vec2(1.0,0.0), z)), 1e-4);\n        maxR = max(maxR, R);\n    }\n    C /= float(D);\n#if AUTO_SCALE\n    S = (1.15*maxR)/ZOOM;\n#else\n    S = 1.0/ZOOM;\n#endif\n}\n\n// start k=1; S1 = σ1 = z\nvoid pos_at(vec2 z, float r, float th, float k, out vec2 S, out vec2 Sig){\n    if(k <= 1.0000001){ S=z; Sig=z; return; }\n    vec2 ONE=vec2(1.0,0.0), zk=zpow_polar(r,th,k), den=csub(ONE,z);\n    vec2 inv1=cdiv(ONE,den), inv2=cmul(inv1,inv1);\n    S   = cdiv( cmul(z, csub(ONE, zk)), den );\n    vec2 part = cdiv( cmul(cmul(z,z), csub(ONE, zk)), vec2(k,0.0) );\n    Sig = csub( cdiv(z, den), cmul(part, inv2) );\n}\n\n// smooth palette (same as Buffer A)\nvec3 pal_base(float t){\n    const float TAU=6.28318530718;\n    vec3 a=vec3(0.56,0.53,0.54), b=vec3(0.44), c=vec3(1.0), d=vec3(0.00,0.33,0.67);\n    return a + b*cos(TAU*(c*t + d));\n}\nvec3 pal_tuned(vec3 col){\n    float l=dot(col, vec3(0.299,0.587,0.114));\n    col = mix(vec3(l), col, SAT_BOOST);\n    col = pow(max(col,0.0), vec3(GAMMA));\n    col *= VAL_SCALE;\n    return clamp(col,0.0,1.0);\n}\nvec3 pal(float t){ return pal_tuned(pal_base(t)); }\nvec3 colRaw(float t){ return pal(t); }\nvec3 colCes(float t){ return pal(t + 0.5); }\n\n// ----------------------------------------------------------------------\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord){\n    vec2 p; float px; toWorld(fragCoord, p, px);\n    vec3 col = texture(iChannel0, fragCoord/iResolution.xy).rgb;\n\n    float epoch      = floor(iTime / RESTART_SEC);\n    float epochShift = epoch*9973.0;\n\n    vec2 C; float S; centerAndScale(epochShift, C, S);\n\n    float t = mod(iTime, RESTART_SEC)*SPEED + 1.0;\n    float n = floor(t), ph = fract(t);\n\n    float r, th; vec2 z = sampleZ(0, epochShift, r, th);\n    vec2 S0,Sig0,S1,Sig1; pos_at(z,r,th,n, S0,Sig0); pos_at(z,r,th,n+1.0, S1,Sig1);\n\n    vec2 rawDot = (mix(S0,S1,ph)   - C)/S;\n    vec2 cesDot = (mix(Sig0,Sig1,ph)- C)/S;\n\n    float phase = iTime*COLOR_RATE + h1(epoch*0.137 + 0.314);\n    vec3  inkR  = colRaw(phase);\n    vec3  inkC  = colCes(phase);\n\n    float aR = smoothstep(DOT_RAW_PX*px, 0.0, length(p - rawDot));\n    float aC = smoothstep(DOT_CES_PX*px, 0.0, length(p - cesDot));\n    col = mix(col, inkR, aR);\n    col = mix(col, inkC, aC);\n\n    fragColor = vec4(col, 1.0);\n}",
+   "name": "Image",
+   "description": "",
+   "type": "image"
+  },
+  {
+   "inputs": [
+    {
+     "id": "4dXGR8",
+     "filepath": "/media/previz/buffer00.png",
+     "type": "buffer",
+     "channel": 0,
+     "sampler": {
+      "filter": "linear",
+      "wrap": "clamp",
+      "vflip": "true",
+      "srgb": "false",
+      "internal": "byte"
+     },
+     "published": 1
+    }
+   ],
+   "outputs": [
+    {
+     "id": "4dXGR8",
+     "channel": 0
+    }
+   ],
+   "code": "// BUFFER A — pen-style trails with smooth saturated colors (opposite hues)\n// iChannel0 must point to Buffer A (self-feedback)\n\n#define SPEED         10.0   // steps per second\n#define RESTART_SEC    8.0   // reseed + recenter every N seconds\n#define LINE_PX        2.0   // trail thickness in screen px\n#define ZOOM           4.0   // zoom in\n#define D              1     // number of seeds (you’re using 1)\n#define SEED         123.0   // base RNG seed\n#define FADE          0.95   // trail persistence\n#define ANGLE_EPS     0.002  // avoid exactly z=1\n#define AUTO_SCALE       1   // fit to frame then apply ZOOM\n\n// color timing (independent of SPEED)\n#define COLOR_RATE     0.18  // try 0.12–0.30 for slower/faster hue drift\n\n// ---- palette tuning (richer, a bit darker) ----\n#define SAT_BOOST      0.45  // >1 increases saturation\n#define VAL_SCALE      0.72  // <1 lowers brightness slightly\n#define GAMMA          0.48  // >1 deepens midtones\n\n// ----------------------------- helpers --------------------------------\nfloat h1(float x){ return fract(sin(x)*43758.5453123); }\n\nvoid toWorld(vec2 fragCoord, out vec2 p, out float px){\n    vec2 R = iResolution.xy; float s = min(R.x,R.y), W = 2.2;\n    vec2 c0 = 0.5*R; p = ((fragCoord - c0)/s)*(2.0*W); px = (2.0*W)/s;\n}\n\nfloat sdSegment(vec2 p, vec2 a, vec2 b){\n    vec2 pa = p - a, ba = b - a;\n    float h = clamp(dot(pa,ba)/max(dot(ba,ba),1e-9), 0., 1.);\n    return length(pa - ba*h);\n}\n\nvec2 cmul(vec2 a, vec2 b){ return vec2(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x); }\nvec2 csub(vec2 a, vec2 b){ return a - b; }\nvec2 cdiv(vec2 a, vec2 b){\n    float d = dot(b,b);\n    return vec2((a.x*b.x + a.y*b.y)/d, (a.y*b.x - a.x*b.y)/d);\n}\n\nvec2 zpow_polar(float r, float th, float k){\n    float rk = pow(r, k), a = k*th;\n    return rk * vec2(cos(a), sin(a));\n}\n\n// epoch-aware unit-circle seed (avoid z=1)\nvec2 sampleZ(int j, float epochShift, out float r, out float th){\n    float s = SEED + epochShift + float(j)*19.19;\n    float u = h1(s+5.91);\n    th = 6.28318530718 * u;\n    if (abs(sin(0.5*th)) < ANGLE_EPS) th += 2.0*ANGLE_EPS;\n    r = 1.0;\n    return vec2(cos(th), sin(th));\n}\n\n// Cesàro limit (k=1 start): L = z/(1 - z)\nvec2 cesaroLimit(vec2 z){ return cdiv(z, csub(vec2(1.0,0.0), z)); }\n\n// center at Cesàro limit(s); scale to fit, then ZOOM\nvoid centerAndScale(float epochShift, out vec2 C, out float S){\n    C = vec2(0.0); float maxR = 1.0;\n    for(int j=0;j<D;++j){\n        float r, th; vec2 z = sampleZ(j, epochShift, r, th);\n        C += cesaroLimit(z);\n        float R = 1.0 / max(length(csub(vec2(1.0,0.0), z)), 1e-4); // |1/(1-z)|\n        maxR = max(maxR, R);\n    }\n    C /= float(D);\n#if AUTO_SCALE\n    S = (1.15*maxR) / ZOOM;\n#else\n    S = 1.0 / ZOOM;\n#endif\n}\n\n// start k=1; exact S1 = σ1 = z\n//   S_k  = z(1 - z^k)/(1 - z)\n//   σ_k  = z/(1 - z) - [z^2 (1 - z^k)] / [k (1 - z)^2]\nvoid pos_at(vec2 z, float r, float th, float k, out vec2 S, out vec2 Sig){\n    if(k <= 1.0000001){ S = z; Sig = z; return; }\n    vec2 ONE = vec2(1.0,0.0);\n    vec2 zk  = zpow_polar(r, th, k);\n    vec2 den = csub(ONE, z);\n    vec2 inv1= cdiv(ONE, den);\n    vec2 inv2= cmul(inv1, inv1);\n    S   = cdiv( cmul(z, csub(ONE, zk)), den );\n    vec2 part = cdiv( cmul(cmul(z,z), csub(ONE, zk)), vec2(k,0.0) );\n    Sig = csub( cdiv(z, den), cmul(part, inv2) );\n}\n\n// ---- smooth cosine palette (IQ-style) + tuning ------------------------\nvec3 pal_base(float t){\n    const float TAU = 6.28318530718;\n    vec3 a = vec3(0.56, 0.53, 0.54);   // base\n    vec3 b = vec3(0.44, 0.44, 0.44);   // amplitude\n    vec3 c = vec3(1.0);                // frequency\n    vec3 d = vec3(0.00, 0.33, 0.67);   // per-channel phase\n    return a + b * cos(TAU*(c*t + d));\n}\nvec3 pal_tuned(vec3 col){\n    float l = dot(col, vec3(0.299,0.587,0.114));\n    col = mix(vec3(l), col, SAT_BOOST);\n    col = pow(max(col, 0.0), vec3(GAMMA));\n    col *= VAL_SCALE;\n    return clamp(col, 0.0, 1.0);\n}\nvec3 pal(float t){ return pal_tuned(pal_base(t)); }\nvec3 colRaw(float t){ return pal(t); }         // ordinary\nvec3 colCes(float t){ return pal(t + 0.5); }   // Cesàro (opposite hue)\n\n// ----------------------------------------------------------------------\nvoid mainImage(out vec4 fragColor, in vec2 fragCoord){\n    float epoch     = floor(iTime / RESTART_SEC);\n    float epochTag  = fract(sin((epoch+1.0)*12.9898)*43758.5453); // store in alpha\n    float epochSeed = h1(epoch*0.137 + 0.314);                    // color phase jitter\n\n    vec4 prev   = (iFrame==0 ? vec4(1.0) : texture(iChannel0, fragCoord/iResolution.xy));\n    bool fresh  = (iFrame==0) || (abs(prev.a - epochTag) > 1e-4); // clear on restart\n    vec3 canvas = fresh ? vec3(1.0) : prev.rgb;\n    vec3 col    = mix(vec3(1.0), canvas, FADE);\n\n    vec2 p; float px; toWorld(fragCoord, p, px);\n    float lw = LINE_PX * px;\n\n    vec2 C; float S; centerAndScale(epoch*9973.0, C, S);\n\n    // motion time (within epoch)\n    float tL = mod(iTime, RESTART_SEC);\n    float t  = tL*SPEED + 1.0;\n    float dt = max(iTimeDelta*SPEED, 1e-4);\n    float n0 = floor(max(1.0, t - dt)), ph0 = fract(max(1.0, t - dt));\n    float n1 = floor(t),                ph1 = fract(t);\n\n    // color phase: continuous in real time, independent of SPEED\n    float phase = iTime*COLOR_RATE + epochSeed;\n\n    for(int j=0; j<D; ++j){\n        float r, th; vec2 z = sampleZ(j, epoch*9973.0, r, th);\n\n        // Ordinary (RAW) segment\n        vec2 S00,Sx,S01,Sx2;  pos_at(z,r,th,n0,    S00,Sx);\n                              pos_at(z,r,th,n0+1., S01,Sx2);\n        vec2 P0 = (mix(S00,S01,ph0) - C)/S;\n\n        vec2 S10,Sx3,S11,Sx4; pos_at(z,r,th,n1,    S10,Sx3);\n                              pos_at(z,r,th,n1+1., S11,Sx4);\n        vec2 P1 = (mix(S10,S11,ph1) - C)/S;\n\n        float a = smoothstep(lw*1.3, lw*0.6, sdSegment(p, P0, P1));\n        col = mix(col, colRaw(phase), a);\n\n        // Cesàro segment\n        vec2 T0, Sig0, T1, Sig1;\n        pos_at(z,r,th,n0,    T0, Sig0);\n        pos_at(z,r,th,n0+1., T1, Sig1);\n        vec2 Q0 = (mix(Sig0,Sig1,ph0) - C)/S;\n\n        vec2 U0, Sig2, U1, Sig3;\n        pos_at(z,r,th,n1,    U0, Sig2);\n        pos_at(z,r,th,n1+1., U1, Sig3);\n        vec2 Q1 = (mix(Sig2,Sig3,ph1) - C)/S;\n\n        float b = smoothstep(lw*1.3, lw*0.6, sdSegment(p, Q0, Q1));\n        col = mix(col, colCes(phase), b);\n    }\n\n    fragColor = vec4(col, epochTag);\n}",
+   "name": "Buffer A",
+   "description": "",
+   "type": "buffer"
+  }
+ ]
+}
