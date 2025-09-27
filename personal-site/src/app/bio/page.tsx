@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function BioPage() {
   return (
     <div className="pt-20 min-h-screen">
@@ -29,9 +31,13 @@ export default function BioPage() {
           {/* Right Column - Image (1/3 width) */}
           <div className="col-span-4 flex flex-col justify-center py-20">
                 <div className="w-full max-w-sm mx-auto">
-                  <img 
-                    src="/Fizzcarraldo.jpg" 
+                  <Image
+                    src="/rbwang/Fizzcarraldo.jpg"
                     alt="Scene from Fitzcarraldo"
+                    width={600}
+                    height={800}
+                    priority
+                    unoptimized
                     className="w-full h-auto object-cover rounded-sm"
                   />
                   <p className="text-sm text-gray-600 text-center mt-4 font-futura uppercase tracking-wider">
