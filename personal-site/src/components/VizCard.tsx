@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { SimpleShader } from './SimpleShader';
 import { Viz1Shader } from './Viz1Shader';
 import { Viz2Shader } from './Viz2Shader';
+import { Viz4Shader } from './Viz4Shader';
 
 export type Viz = {
   id: string;
@@ -63,6 +64,10 @@ export function VizCard({ viz, isExpanded, onToggle }: Props) {
               ) : viz.id === 'viz-3' ? (
                 <div style={{ position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)', width: '100%', height: isExpanded ? '100%' : '384px' }}>
                   <SimpleShader paused={!isExpanded} />
+                </div>
+              ) : viz.id === 'viz-4' ? (
+                <div style={{ position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)', width: '100%', height: isExpanded ? '100%' : '384px' }}>
+                  <Viz4Shader paused={!isExpanded} />
                 </div>
               ) : (
                 <div className="w-full h-full bg-white flex items-center justify-center">
