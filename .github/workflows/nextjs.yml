@@ -56,6 +56,10 @@ jobs:
         with:
           node-version: "20"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache-dependency-path: |
+            personal-site/package-lock.json
+            personal-site/yarn.lock
+            personal-site/npm-shrinkwrap.json
       - name: Setup Pages
         uses: actions/configure-pages@v5
         # We manage basePath/assetPrefix ourselves in next.config.mjs
