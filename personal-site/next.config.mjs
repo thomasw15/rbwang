@@ -5,6 +5,9 @@ const nextConfig = {
     typedRoutes: true,
   },
   output: 'export',
+  // Required for GitHub Pages under repository subpath
+  basePath: '/rbwang',
+  assetPrefix: '/rbwang/',
   trailingSlash: true,
   images: {
     unoptimized: true,
