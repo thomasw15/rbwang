@@ -5,9 +5,10 @@ import { VizCard, Viz } from '../components/VizCard';
 export default function HomePage() {
   const items: Viz[] = useMemo(
     () => [
-      { id: 'viz-1', title: 'Divergent Matrix Series', caption: 'A placeholder visualization' },
-      { id: 'viz-2', title: 'Unitary Invariance', caption: 'Transparent stripes on Lp unit curve' },
-      { id: 'viz-3', title: 'Submanifold Optimization', caption: 'Yet another placeholder' },
+      { id: 'viz-1', title: 'Divergent Matrix Series', caption: 'Divergent Matrix Series' },
+      { id: 'viz-2', title: 'Unitary Invariance', caption: 'Unitarily Invariant norm' },
+      { id: 'viz-3', title: 'Submanifold Optimization', caption: 'Submanifold Optimization' },
+      { id: 'viz-4', title: 'Unbounded SVD', caption: 'Unbounded SVD' },
     ],
     []
   );
