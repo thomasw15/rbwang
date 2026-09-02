@@ -90,31 +90,31 @@ const ACADEMIC_ACTIVITIES = [
   {
     heading: 'Graduate Teaching Assistant, University of Chicago',
     items: [
-      'STAT 30900 (Matrix Computation) \u2014 Fall 2023, Fall 2024',
-      'STAT 28000 (Optimization) \u2014 Spring 2024',
-      'STAT 30960 (Matrix Calculus) \u2014 Spring 2025',
+      { text: 'STAT 30900 (Matrix Computation) \u2014 Fall 2023, Fall 2024' },
+      { text: 'STAT 28000 (Optimization) \u2014 Spring 2024' },
+      { text: 'STAT 30960 (Matrix Calculus) \u2014 Spring 2025', note: 'Guest Lecturer' },
     ],
   },
   {
     heading: 'Conference Organization',
     items: [
-      'Special Session on Applied and Computational Differential Geometry, AMS 2026 Spring Eastern Sectional Meeting',
-      'Minisymposium on Matrix Geometries, ILAS 2026',
-      'Special Session on Algebra and Geometry in Computations, JMM 2027',
+      { text: 'Special Session on Applied and Computational Differential Geometry, AMS 2026 Spring Eastern Sectional Meeting' },
+      { text: 'Minisymposium on Matrix Geometries, ILAS 2026' },
+      { text: 'Special Session on Algebra and Geometry in Computations, JMM 2027' },
     ],
   },
   {
     heading: 'Referee',
     items: [
-      'SIAM Journal on Matrix Analysis and Applications, SIAM Journal on Scientific Computing, Journal of Machine Learning Research, Calcolo, Advances in Applied Clifford Algebras, Linear Algebra and Its Applications, Numerical Linear Algebra with Applications, Discrete & Computational Geometry, Linear and Multilinear Algebra, Mathematics of Computation',
+      { text: 'SIAM Journal on Matrix Analysis and Applications, SIAM Journal on Scientific Computing, Journal of Machine Learning Research, Calcolo, Advances in Applied Clifford Algebras, Linear Algebra and Its Applications, Numerical Linear Algebra with Applications, Discrete & Computational Geometry, Linear and Multilinear Algebra, Mathematics of Computation' },
     ],
   },
   {
     heading: 'Short Programs',
     items: [
-      'Study Abroad at Math in Moscow, Independent University of Moscow (Spring 2021)',
-      'REU at Budapest Semesters in Mathematics (Summer 2020)',
-      'Gene Golub SIAM Summer School on Quantum Computing, Duke University (Summer 2026)',
+      { text: 'Study Abroad at Math in Moscow, Independent University of Moscow (Spring 2021)' },
+      { text: 'REU at Budapest Semesters in Mathematics (Summer 2020)' },
+      { text: 'Gene Golub SIAM Summer School on Quantum Computing, Duke University (Summer 2026)' },
     ],
   },
 ];
@@ -176,8 +176,13 @@ function VizDescription({ id }: { id: string }) {
             <p className="font-sans text-[14px] font-semibold text-gray-800 mb-1">{group.heading}</p>
             <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
               {group.items.map((item) => (
-                <li key={item} className="font-sans text-[14px] leading-relaxed text-gray-600">
-                  {item}
+                <li key={item.text} className="font-sans text-[14px] leading-relaxed text-gray-600">
+                  {item.text}
+                  {item.note && (
+                    <span className="ml-2 align-middle font-sans text-[10px] font-semibold uppercase tracking-wide text-gray-500 bg-gray-100 rounded px-1.5 py-0.5">
+                      {item.note}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -194,9 +199,9 @@ function VizDescription({ id }: { id: string }) {
 }
 
 function VizShader({ id, paused }: { id: string; paused: boolean }) {
-  if (id === 'research') return <Viz1Shader paused={paused} />;
+  if (id === 'research') return <SimpleShader paused={paused} />;
   if (id === 'papers') return <Viz2Shader paused={paused} />;
-  if (id === 'talks') return <SimpleShader paused={paused} />;
+  if (id === 'talks') return <Viz1Shader paused={paused} />;
   if (id === 'academic-activities') return <Viz4Shader paused={paused} />;
   return (
     <div className="w-full h-full bg-white flex items-center justify-center">
