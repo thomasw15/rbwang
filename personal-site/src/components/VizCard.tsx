@@ -88,7 +88,10 @@ const TALKS = [
   },
 ];
 
-const ACADEMIC_ACTIVITIES = [
+type AcademicActivityItem = { text: string; note?: string; href?: string };
+type AcademicActivityGroup = { heading: string; items: AcademicActivityItem[] };
+
+const ACADEMIC_ACTIVITIES: AcademicActivityGroup[] = [
   {
     heading: 'Graduate Teaching Assistant, University of Chicago',
     items: [
@@ -126,6 +129,10 @@ const ACADEMIC_ACTIVITIES = [
       { text: 'Study Abroad at Math in Moscow, Independent University of Moscow (Spring 2021)' },
       { text: 'REU at Budapest Semesters in Mathematics (Summer 2020)' },
       { text: 'Gene Golub SIAM Summer School on Quantum Computing, Duke University (Summer 2026)' },
+      {
+        text: 'Metric Algebraic Geometry: Going Global, ICERM (Spring 2027)',
+        href: 'https://icerm.brown.edu/program/semester_program/sp-s27',
+      },
     ],
   },
 ];
@@ -188,7 +195,19 @@ function VizDescription({ id }: { id: string }) {
             <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
               {group.items.map((item) => (
                 <li key={item.text} className="font-sans text-[14px] leading-relaxed text-gray-600">
-                  {item.text}
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800"
+                    >
+                      {item.text}
+                    </a>
+                  ) : (
+                    item.text
+                  )}
                   {item.note && (
                     <span className="ml-2 align-middle font-sans text-[10px] font-semibold uppercase tracking-wide text-gray-500 bg-gray-100 rounded px-1.5 py-0.5">
                       {item.note}
