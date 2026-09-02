@@ -38,7 +38,7 @@ export default function HomePage() {
           >
             Computational and Applied Mathematics
           </a>{' '}
-          at University of Chicago, advised by{' '}
+          at University of Chicago advised by{' '}
           <a
             href="https://www.stat.uchicago.edu/~lekheng/"
             target="_blank"
