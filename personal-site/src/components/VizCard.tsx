@@ -18,7 +18,9 @@ type Props = {
 };
 
 // NOTE: content below is placeholder scaffolding for the new five-section
-// layout (Research / Papers / Talks / Academic Activities / About Me).
+// layout (Research / Papers / Talks / Academic Activities). The intro
+// blurb with the same bio copy now lives at the top of the homepage
+// instead of a separate About box.
 // The old per-paper descriptions (Divergent Matrix Series, Unitary
 // Invariance, Submanifold Optimization, Unbounded SVD) are still in git
 // history and are good candidate content for the future Papers section -
@@ -197,35 +199,6 @@ function VizDescription({ id }: { id: string }) {
             </ul>
           </div>
         ))}
-      </div>
-    );
-  }
-  if (id === 'about-me') {
-    return (
-      <div>
-        <p className="mb-3">
-          I am a fifth-year Ph.D. in{' '}
-          <a
-            href="https://cam.uchicago.edu/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="text-blue-600 hover:text-blue-800 underline"
-          >
-            Computational and Applied Mathematics
-          </a>{' '}
-          at University of Chicago, advised by{' '}
-          <a
-            href="https://www.stat.uchicago.edu/~lekheng/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="text-blue-600 hover:text-blue-800 underline"
-          >
-            Lek-Heng Lim
-          </a>
-          .
-        </p>
       </div>
     );
   }
