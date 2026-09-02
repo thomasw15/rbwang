@@ -24,6 +24,29 @@ type Props = {
 // history and are good candidate content for the future Papers section -
 // they were dropped here rather than guessed into place, since real
 // content for each section is being filled in step by step.
+const PAPERS = [
+  {
+    title: 'The Grassmannian of Indefinite Subspaces',
+    href: '/rbwang/papers/indefinite-grassmannian.pdf',
+    venue: 'Preprint',
+  },
+  {
+    title: 'Linear Representations of Manifolds',
+    href: '/rbwang/papers/linear-representations-of-manifolds.pdf',
+    venue: 'Preprint',
+  },
+  {
+    title: 'Generalized Matrix Nearness Problems II',
+    href: '/rbwang/papers/generalized-matrix-nearness-problems-ii.pdf',
+    venue: 'Preprint',
+  },
+  {
+    title: 'Summing Divergent Matrix Series',
+    href: '/rbwang/papers/summing-divergent-matrix-series.pdf',
+    venue: 'Numerische Mathematik (2025)',
+  },
+];
+
 function VizDescription({ id }: { id: string }) {
   if (id === 'research') {
     return (
@@ -32,6 +55,25 @@ function VizDescription({ id }: { id: string }) {
           My research centers around how symmetries and invariants show up in computations, which brings applications to various things including optimization, numerical linear algebra, and quantum computing.
         </p>
       </div>
+    );
+  }
+  if (id === 'papers') {
+    return (
+      <ul className="list-disc pl-5 space-y-3 marker:text-gray-400">
+        {PAPERS.map((paper) => (
+          <li key={paper.title}>
+            <a
+              href={paper.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              {paper.title}
+            </a>
+            <span className="block text-xs text-gray-500 mt-0.5">{paper.venue}</span>
+          </li>
+        ))}
+      </ul>
     );
   }
   return (
