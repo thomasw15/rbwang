@@ -106,7 +106,16 @@ const ACADEMIC_ACTIVITIES = [
   {
     heading: 'Referee',
     items: [
-      { text: 'SIAM Journal on Matrix Analysis and Applications, SIAM Journal on Scientific Computing, Journal of Machine Learning Research, Calcolo, Advances in Applied Clifford Algebras, Linear Algebra and Its Applications, Numerical Linear Algebra with Applications, Discrete & Computational Geometry, Linear and Multilinear Algebra, Mathematics of Computation' },
+      { text: 'SIAM Journal on Matrix Analysis and Applications' },
+      { text: 'SIAM Journal on Scientific Computing' },
+      { text: 'Journal of Machine Learning Research' },
+      { text: 'Calcolo' },
+      { text: 'Advances in Applied Clifford Algebras' },
+      { text: 'Linear Algebra and Its Applications' },
+      { text: 'Numerical Linear Algebra with Applications' },
+      { text: 'Discrete & Computational Geometry' },
+      { text: 'Linear and Multilinear Algebra' },
+      { text: 'Mathematics of Computation' },
     ],
   },
   {
