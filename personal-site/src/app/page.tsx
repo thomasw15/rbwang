@@ -12,7 +12,7 @@ export default function HomePage() {
       { id: 'papers', title: 'Papers' },
       { id: 'talks', title: 'Talks' },
       { id: 'academic-activities', title: 'Academic Activities' },
-      { id: 'about-me', title: 'About Me' },
+      { id: 'about-me', title: 'About' },
     ],
     []
   );

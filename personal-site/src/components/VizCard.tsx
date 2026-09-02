@@ -133,7 +133,7 @@ function VizDescription({ id }: { id: string }) {
     return (
       <div>
         <p className="mb-3">
-          My research centers around how symmetries and invariants show up in computations, which brings applications to various things including optimization, numerical linear algebra, and quantum computing.
+          I am interested in the roles of symmetry and invariance in computation, with applications in optimization, numerical linear algebra, and quantum computing.
         </p>
       </div>
     );
@@ -197,6 +197,35 @@ function VizDescription({ id }: { id: string }) {
             </ul>
           </div>
         ))}
+      </div>
+    );
+  }
+  if (id === 'about-me') {
+    return (
+      <div>
+        <p className="mb-3">
+          I am a fifth-year Ph.D. in{' '}
+          <a
+            href="https://cam.uchicago.edu/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            Computational and Applied Mathematics
+          </a>{' '}
+          at University of Chicago, advised by{' '}
+          <a
+            href="https://www.stat.uchicago.edu/~lekheng/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            Lek-Heng Lim
+          </a>
+          .
+        </p>
       </div>
     );
   }
