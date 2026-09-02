@@ -153,7 +153,7 @@ export function VizCard({ viz, isExpanded, onToggle }: Props) {
             className="relative"
             style={
               isExpanded
-                ? { width: '100%', maxWidth: 440, aspectRatio: '4 / 3', margin: '0 auto' }
+                ? { width: '100%', maxWidth: 480, aspectRatio: '1 / 1', margin: '0 auto' }
                 : { position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)', width: '100%', height: '384px' }
             }
           >
