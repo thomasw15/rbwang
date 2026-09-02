@@ -42,9 +42,16 @@ const PAPERS = [
   },
   {
     title: 'Summing Divergent Matrix Series',
-    href: '/rbwang/papers/summing-divergent-matrix-series.pdf',
+    href: 'https://link.springer.com/article/10.1007/s00211-025-01493-4',
     venue: 'Numerische Mathematik (2025)',
   },
+  {
+    title: 'Geometric Programming for 3D Circuits',
+    href: 'https://arxiv.org/abs/2504.01090',
+    venue: 'Preprint',
+  },
+  // TODO: the "arithmetic Kakeya conjecture" paper - title/arxiv link
+  // not yet confirmed, see conversation with Thomas.
 ];
 
 function VizDescription({ id }: { id: string }) {
@@ -66,11 +73,17 @@ function VizDescription({ id }: { id: string }) {
               href={paper.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 underline"
+              // Stop the click from bubbling up to the card's own onClick -
+              // without this, clicking a paper link also toggled the card
+              // closed (and, since the link's default navigation and the
+              // React state update raced, the click looked like it just
+              // closed the box instead of opening the paper).
+              onClick={(e) => e.stopPropagation()}
+              className="font-sans text-[14px] leading-relaxed text-blue-600 hover:text-blue-800 underline"
             >
               {paper.title}
             </a>
-            <span className="block text-xs text-gray-500 mt-0.5">{paper.venue}</span>
+            <span className="block font-sans text-xs text-gray-500 mt-0.5">{paper.venue}</span>
           </li>
         ))}
       </ul>
