@@ -129,10 +129,7 @@ const ACADEMIC_ACTIVITIES: AcademicActivityGroup[] = [
       { text: 'Study Abroad at Math in Moscow, Independent University of Moscow (Spring 2021)' },
       { text: 'REU at Budapest Semesters in Mathematics (Summer 2020)' },
       { text: 'Gene Golub SIAM Summer School on Quantum Computing, Duke University (Summer 2026)' },
-      {
-        text: 'Metric Algebraic Geometry: Going Global, ICERM (Spring 2027)',
-        href: 'https://icerm.brown.edu/program/semester_program/sp-s27',
-      },
+      { text: 'Metric Algebraic Geometry: Going Global, ICERM (Spring 2027)' },
     ],
   },
 ];
