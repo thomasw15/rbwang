@@ -34,7 +34,7 @@ export default function HomePage() {
             href="https://cam.uchicago.edu/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800"
           >
             Computational and Applied Mathematics
           </a>{' '}
@@ -43,7 +43,7 @@ export default function HomePage() {
             href="https://www.stat.uchicago.edu/~lekheng/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800"
           >
             Lek-Heng Lim
           </a>

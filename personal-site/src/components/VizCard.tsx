@@ -155,7 +155,7 @@ function VizDescription({ id }: { id: string }) {
               // React state update raced, the click looked like it just
               // closed the box instead of opening the paper).
               onClick={(e) => e.stopPropagation()}
-              className="font-sans text-[14px] leading-relaxed text-blue-600 hover:text-blue-800 underline"
+              className="font-sans text-[14px] leading-relaxed text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800"
             >
               {paper.title}
             </a>
