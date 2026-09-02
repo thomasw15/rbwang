@@ -263,7 +263,16 @@ export function VizCard({ viz, isExpanded, onToggle }: Props) {
     >
       <motion.div
         layout
-        onClick={() => onToggle(viz.id)}
+        onClick={() => {
+          // Dragging across the description text to select-and-copy it also
+          // fires a click when the mouse is released - without this check
+          // that click toggled the box closed right as the user finished
+          // selecting, before they could copy anything.
+          if (typeof window !== 'undefined' && window.getSelection()?.toString()) {
+            return;
+          }
+          onToggle(viz.id);
+        }}
         className="group w-full text-left focus-ring cursor-pointer relative overflow-hidden bg-white transition-colors border border-gray-200 rounded-sm"
         style={isExpanded ? undefined : { height: 96 }}
         transition={{ layout: { duration: 0.35, ease: 'easeInOut' } }}
@@ -280,7 +289,7 @@ export function VizCard({ viz, isExpanded, onToggle }: Props) {
             {viz.title}
           </span>
           {isExpanded && (
-            <div className="text-sm text-gray-600 leading-relaxed">
+            <div className="text-sm text-gray-600 leading-relaxed cursor-text">
               <VizDescription id={viz.id} />
             </div>
           )}
