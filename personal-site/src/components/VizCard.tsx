@@ -50,8 +50,11 @@ const PAPERS = [
     href: 'https://arxiv.org/abs/2504.01090',
     venue: 'Preprint',
   },
-  // TODO: the "arithmetic Kakeya conjecture" paper - title/arxiv link
-  // not yet confirmed, see conversation with Thomas.
+  {
+    title: 'Pattern Problems related to the Arithmetic Kakeya Conjecture',
+    href: 'https://arxiv.org/abs/2011.07056',
+    venue: 'Preprint',
+  },
 ];
 
 function VizDescription({ id }: { id: string }) {
