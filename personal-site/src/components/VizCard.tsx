@@ -80,11 +80,6 @@ const TALKS = [
     date: 'April 2026',
   },
   {
-    title: 'Submanifold Optimization: A Complete Classification',
-    venue: 'Discrete Exterior Calculus, Institute for Mathematical and Statistical Innovation',
-    date: 'September 2025',
-  },
-  {
     title: 'Summing Divergent Matrix Series',
     venue: 'Algebraic Statistics, Institute for Mathematical and Statistical Innovation',
     date: 'November 2023',
@@ -101,12 +96,6 @@ const ACADEMIC_ACTIVITIES = [
     ],
   },
   {
-    heading: 'Referee',
-    items: [
-      'SIAM Journal on Matrix Analysis and Applications, SIAM Journal on Scientific Computing, Journal of Machine Learning Research, Calcolo, Advances in Applied Clifford Algebras, Linear Algebra and Its Applications, Numerical Linear Algebra with Applications, Discrete & Computational Geometry, Linear and Multilinear Algebra, Mathematics of Computation',
-    ],
-  },
-  {
     heading: 'Conference Organization',
     items: [
       'Special Session on Applied and Computational Differential Geometry, AMS 2026 Spring Eastern Sectional Meeting',
@@ -115,11 +104,17 @@ const ACADEMIC_ACTIVITIES = [
     ],
   },
   {
+    heading: 'Referee',
+    items: [
+      'SIAM Journal on Matrix Analysis and Applications, SIAM Journal on Scientific Computing, Journal of Machine Learning Research, Calcolo, Advances in Applied Clifford Algebras, Linear Algebra and Its Applications, Numerical Linear Algebra with Applications, Discrete & Computational Geometry, Linear and Multilinear Algebra, Mathematics of Computation',
+    ],
+  },
+  {
     heading: 'Short Programs',
     items: [
-      'Study Abroad at Math in Moscow, Independent University of Moscow \u2014 Spring 2021',
-      'REU at Budapest Semesters in Mathematics \u2014 Summer 2020',
-      'Gene Golub SIAM Summer School on Quantum Computing, Duke University \u2014 Summer 2026',
+      'Study Abroad at Math in Moscow, Independent University of Moscow (Spring 2021)',
+      'REU at Budapest Semesters in Mathematics (Summer 2020)',
+      'Gene Golub SIAM Summer School on Quantum Computing, Duke University (Summer 2026)',
     ],
   },
 ];
