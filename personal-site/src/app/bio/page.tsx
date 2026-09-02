@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function BioPage() {
   return (
-    <div className="pt-20 min-h-screen">
+    <div className="min-h-screen">
       <div className="container-px mx-auto max-w-7xl">
         <div className="grid grid-cols-12 gap-8 min-h-screen">
           {/* Left Column - Bio Text (2/3 width) */}

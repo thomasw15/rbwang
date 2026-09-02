@@ -1,6 +1,6 @@
 export default function OthersPage() {
   return (
-    <div className="pt-20 min-h-screen">
+    <div className="min-h-screen">
       <div className="container-px mx-auto max-w-7xl">
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center max-w-4xl">

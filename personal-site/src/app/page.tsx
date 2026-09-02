@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { VizCard, Viz } from '../components/VizCard';
 
 export default function HomePage() {
@@ -13,52 +14,54 @@ export default function HomePage() {
     []
   );
 
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [openId, setOpenId] = useState<string | null>(null);
 
-  const toggleExpanded = useCallback((id: string) => {
-    console.log('Toggle called with id:', id, 'current expandedId:', expandedId);
-    setExpandedId(expandedId === id ? null : id);
-  }, [expandedId]);
+  const toggleViz = useCallback((id: string) => {
+    setOpenId((current) => (current === id ? null : id));
+  }, []);
+
+  const anyOpen = openId !== null;
 
   return (
-    <div className="pt-20 min-h-screen">
+    <div className="min-h-screen">
       <div className="container-px mx-auto max-w-7xl">
-        <div className="grid grid-cols-12 gap-8 min-h-screen">
-          {/* Left Column - Research Section */}
-          <div className="col-span-4 flex flex-col justify-center py-20">
+        <div className="grid grid-cols-12 gap-8">
+          {/* Left Column - Research description. Narrows to give the visualizations
+              more room while one of them is expanded. */}
+          <motion.div
+            layout
+            className={anyOpen ? 'col-span-3 flex flex-col justify-center py-16' : 'col-span-5 flex flex-col justify-center py-16'}
+            transition={{ layout: { duration: 0.35, ease: 'easeInOut' } }}
+          >
             <div className="mb-8">
-              <h2 className="font-futura text-xs font-normal uppercase tracking-wider mb-6 flex items-center">
+              <h2 className="font-futura text-xs font-normal uppercase tracking-wider mb-6">
                 Research
-                <span className="ml-2 text-sm">↓</span>
               </h2>
-              <div className="space-y-2">
-                {items.map((viz, index) => (
-                  <div key={viz.id} className="flex items-center justify-between text-sm">
-                    <span className="font-mono text-xs">{String(index + 1).padStart(3, '0')}</span>
-                    <span className="font-futura font-normal uppercase tracking-wider">{viz.title}</span>
-                  </div>
-                ))}
-              </div>
+              <p className="text-lg leading-relaxed text-gray-800">
+                My research centers around how symmetries and invariants show up in computations, which brings applications to various things including optimization, numerical linear algebra, and quantum computing.
+              </p>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Right Column - Visualizations */}
-          <div className="col-span-8 flex flex-col justify-center py-20">
+          {/* Right Column - Visualizations. Widens to fill the room the left column gives up. */}
+          <motion.div
+            layout
+            className={anyOpen ? 'col-span-9 flex flex-col justify-start py-16' : 'col-span-7 flex flex-col justify-start py-16'}
+            transition={{ layout: { duration: 0.35, ease: 'easeInOut' } }}
+          >
             <div className="flex flex-col items-center justify-center space-y-6">
               {items.map((viz) => (
-                <VizCard 
-                  key={viz.id} 
-                  viz={viz} 
-                  isExpanded={expandedId === viz.id}
-                  onToggle={toggleExpanded}
+                <VizCard
+                  key={viz.id}
+                  viz={viz}
+                  isExpanded={openId === viz.id}
+                  onToggle={toggleViz}
                 />
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>
   );
 }
-
-

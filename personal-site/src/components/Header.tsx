@@ -14,7 +14,7 @@ function HeaderContent() {
   useSearchParams(); // cause client comp re-render on search change for active styles with ?viz
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-30 bg-white">
+    <header className="sticky top-0 z-30 bg-white">
       <div className="container-px mx-auto max-w-7xl">
         <div className="flex items-center justify-between py-6">
           <Link href="/" className="font-ubuntu text-4xl font-normal tracking-tight uppercase">
@@ -37,6 +37,7 @@ function HeaderContent() {
             })}
           </nav>
         </div>
+        <div className="border-b border-gray-400 mx-8 sm:mx-16 md:mx-24" />
       </div>
     </header>
   );
@@ -45,7 +46,7 @@ function HeaderContent() {
 export function Header() {
   return (
     <Suspense fallback={
-      <header className="fixed top-0 left-0 right-0 z-30 bg-white">
+      <header className="sticky top-0 z-30 bg-white">
         <div className="container-px mx-auto max-w-7xl">
           <div className="flex items-center justify-between py-6">
             <Link href="/" className="font-ubuntu text-4xl font-normal tracking-tight uppercase">
@@ -63,6 +64,7 @@ export function Header() {
               ))}
             </nav>
           </div>
+          <div className="border-b border-gray-400 mx-8 sm:mx-16 md:mx-24" />
         </div>
       </header>
     }>
@@ -70,5 +72,3 @@ export function Header() {
     </Suspense>
   );
 }
-
-

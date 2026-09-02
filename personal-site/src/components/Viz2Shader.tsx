@@ -195,7 +195,7 @@ export function Viz2Shader({ paused = false }: { paused?: boolean }) {
 
     function resize() {
       if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
+      const rect = (canvas.parentElement || canvas).getBoundingClientRect();
       const newWidth = rect.width * window.devicePixelRatio;
       const newHeight = rect.height * window.devicePixelRatio;
       canvas.width = newWidth;
@@ -213,21 +213,32 @@ export function Viz2Shader({ paused = false }: { paused?: boolean }) {
     }
 
     window.addEventListener('resize', resize);
+
+    // Also react to the canvas's own container changing size (e.g. a layout
+    // animation resizing it), not just the window - a single mount-time
+    // measurement is not enough since the container can change size later
+    // without a window resize event ever firing.
+    const resizeObserver = new ResizeObserver(() => resize());
+    if (canvas.parentElement) resizeObserver.observe(canvas.parentElement);
     setTimeout(() => {
       animate();
     }, 50);
 
     return () => {
       window.removeEventListener('resize', resize);
+      resizeObserver.disconnect();
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className="w-full h-full"
+      className="absolute inset-0 w-full h-full"
       style={{ 
         display: 'block',
+        position: 'absolute',
+        top: 0,
+        left: 0,
         width: '100%',
         height: '100%',
         background: 'transparent'
