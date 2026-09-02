@@ -32,12 +32,12 @@ const PAPERS = [
   },
   {
     title: 'Linear Representations of Manifolds',
-    href: '/rbwang/papers/linear-representations-of-manifolds.pdf',
+    href: 'https://arxiv.org/abs/2605.14013',
     venue: 'Preprint',
   },
   {
     title: 'Generalized Matrix Nearness Problems II',
-    href: '/rbwang/papers/generalized-matrix-nearness-problems-ii.pdf',
+    href: 'https://arxiv.org/abs/2605.30181',
     venue: 'Preprint',
   },
   {
