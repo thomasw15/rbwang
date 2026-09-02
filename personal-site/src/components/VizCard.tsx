@@ -57,6 +57,73 @@ const PAPERS = [
   },
 ];
 
+// Reverse-chronological, matching the Papers list.
+const TALKS = [
+  {
+    title: 'Linear Representations of Manifolds',
+    venue: 'Matrix Analysis and Applications, JMM 2027',
+    date: 'January 2027',
+  },
+  {
+    title: 'Symmetries in Computations',
+    venue: 'Mathematics Colloquium, William & Mary',
+    date: 'September 2026',
+  },
+  {
+    title: 'Manifold Representation and Riemannian Optimization',
+    venue: 'Algebro-geometric Methods in Deep Learning, 2026 SIAM Annual Meeting',
+    date: 'July 2026',
+  },
+  {
+    title: 'A Ten-fold Way of Matrix Decompositions',
+    venue: 'Midwest Numerical Analysis Day, University of Notre Dame',
+    date: 'April 2026',
+  },
+  {
+    title: 'Submanifold Optimization: A Complete Classification',
+    venue: 'Discrete Exterior Calculus, Institute for Mathematical and Statistical Innovation',
+    date: 'September 2025',
+  },
+  {
+    title: 'Summing Divergent Matrix Series',
+    venue: 'Algebraic Statistics, Institute for Mathematical and Statistical Innovation',
+    date: 'November 2023',
+  },
+];
+
+const ACADEMIC_ACTIVITIES = [
+  {
+    heading: 'Graduate Teaching Assistant, University of Chicago',
+    items: [
+      'STAT 30900 (Matrix Computation) \u2014 Fall 2023, Fall 2024',
+      'STAT 28000 (Optimization) \u2014 Spring 2024',
+      'STAT 30960 (Matrix Calculus) \u2014 Spring 2025',
+    ],
+  },
+  {
+    heading: 'Referee',
+    items: [
+      'SIAM Journal on Matrix Analysis and Applications, SIAM Journal on Scientific Computing, Journal of Machine Learning Research, Calcolo, Advances in Applied Clifford Algebras, Linear Algebra and Its Applications, Numerical Linear Algebra with Applications, Discrete & Computational Geometry, Linear and Multilinear Algebra, Mathematics of Computation',
+    ],
+  },
+  {
+    heading: 'Conference Organization',
+    items: [
+      'Special Session on Applied and Computational Differential Geometry, AMS 2026 Spring Eastern Sectional Meeting',
+      'Minisymposium on Matrix Geometries, ILAS 2026',
+      'Special Session on Algebra and Geometry in Computations, JMM 2027',
+    ],
+  },
+  {
+    heading: 'Short Programs',
+    items: [
+      'Study Abroad at Math in Moscow, Independent University of Moscow \u2014 Spring 2021',
+      'REU at Budapest Semesters in Mathematics \u2014 Summer 2020',
+      'Gene Golub SIAM Summer School on Quantum Computing, Duke University \u2014 Summer 2026',
+    ],
+  },
+];
+
 function VizDescription({ id }: { id: string }) {
   if (id === 'research') {
     return (
@@ -90,6 +157,38 @@ function VizDescription({ id }: { id: string }) {
           </li>
         ))}
       </ul>
+    );
+  }
+  if (id === 'talks') {
+    return (
+      <ul className="list-disc pl-5 space-y-3 marker:text-gray-400">
+        {TALKS.map((talk) => (
+          <li key={talk.title}>
+            <span className="font-sans text-[14px] leading-relaxed text-gray-800">{talk.title}</span>
+            <span className="block font-sans text-xs text-gray-500 mt-0.5">
+              {talk.venue} &mdash; {talk.date}
+            </span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  if (id === 'academic-activities') {
+    return (
+      <div className="space-y-4">
+        {ACADEMIC_ACTIVITIES.map((group) => (
+          <div key={group.heading}>
+            <p className="font-sans text-[14px] font-semibold text-gray-800 mb-1">{group.heading}</p>
+            <ul className="list-disc pl-5 space-y-1 marker:text-gray-400">
+              {group.items.map((item) => (
+                <li key={item} className="font-sans text-[14px] leading-relaxed text-gray-600">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     );
   }
   return (
