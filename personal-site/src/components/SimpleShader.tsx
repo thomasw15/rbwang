@@ -367,7 +367,14 @@ export function SimpleShader({ paused = false }: { paused?: boolean }) {
     function resize() {
       if (!canvas) return;
       
-      const rect = (canvas.parentElement || canvas).getBoundingClientRect();
+      // Use offsetWidth/offsetHeight (layout size), not getBoundingClientRect
+      // (painted/visual size) - a CSS transform from an in-flight layout
+      // animation on an ancestor (e.g. this card expanding) skews
+      // getBoundingClientRect without changing the true layout size, which
+      // would permanently lock the canvas to whatever transient size was
+      // visible at the exact instant resize() happened to run.
+      const target = canvas.parentElement || canvas;
+      const rect = { width: target.offsetWidth, height: target.offsetHeight };
       const newWidth = rect.width * window.devicePixelRatio;
       const newHeight = rect.height * window.devicePixelRatio;
       
