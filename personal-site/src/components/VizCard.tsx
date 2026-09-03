@@ -13,14 +13,12 @@ export type Viz = {
 
 type Props = {
   viz: Viz;
-  isExpanded: boolean;
-  onToggle: (id: string) => void;
 };
 
-// NOTE: content below is placeholder scaffolding for the new five-section
-// layout (Research / Papers / Talks / Academic Activities). The intro
-// blurb with the same bio copy now lives at the top of the homepage
-// instead of a separate About box.
+// Each of these renders as a permanently-expanded section stacked down the
+// single homepage (Research / Papers / Talks / Academic Activities) - no
+// click-to-expand, nothing hidden. The intro blurb with the same bio copy
+// lives at the top of the homepage instead of a separate About section.
 // The old per-paper descriptions (Divergent Matrix Series, Unitary
 // Invariance, Submanifold Optimization, Unbounded SVD) are still in git
 // history and are good candidate content for the future Papers section -
@@ -95,9 +93,9 @@ const ACADEMIC_ACTIVITIES: AcademicActivityGroup[] = [
   {
     heading: 'Graduate Teaching Assistant, University of Chicago',
     items: [
-      { text: 'STAT 30900 (Matrix Computation) \u2014 Fall 2023, Fall 2024' },
-      { text: 'STAT 28000 (Optimization) \u2014 Spring 2024' },
-      { text: 'STAT 30960 (Matrix Calculus) \u2014 Spring 2025', note: 'Guest Lecturer' },
+      { text: 'STAT 30900 (Matrix Computation) — Fall 2023, Fall 2024' },
+      { text: 'STAT 28000 (Optimization) — Spring 2024' },
+      { text: 'STAT 30960 (Matrix Calculus) — Spring 2025', note: 'Guest Lecturer' },
     ],
   },
   {
@@ -153,12 +151,6 @@ function VizDescription({ id }: { id: string }) {
               href={paper.href}
               target="_blank"
               rel="noopener noreferrer"
-              // Stop the click from bubbling up to the card's own onClick -
-              // without this, clicking a paper link also toggled the card
-              // closed (and, since the link's default navigation and the
-              // React state update raced, the click looked like it just
-              // closed the box instead of opening the paper).
-              onClick={(e) => e.stopPropagation()}
               className="font-sans text-[14px] leading-relaxed text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800"
             >
               {paper.title}
@@ -197,7 +189,6 @@ function VizDescription({ id }: { id: string }) {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
                       className="text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800"
                     >
                       {item.text}
@@ -225,11 +216,11 @@ function VizDescription({ id }: { id: string }) {
   );
 }
 
-function VizShader({ id, paused }: { id: string; paused: boolean }) {
-  if (id === 'research') return <SimpleShader paused={paused} />;
-  if (id === 'papers') return <Viz2Shader paused={paused} />;
-  if (id === 'talks') return <Viz1Shader paused={paused} />;
-  if (id === 'academic-activities') return <Viz4Shader paused={paused} />;
+function VizShader({ id }: { id: string }) {
+  if (id === 'research') return <SimpleShader paused={false} />;
+  if (id === 'papers') return <Viz2Shader paused={false} />;
+  if (id === 'talks') return <Viz1Shader paused={false} />;
+  if (id === 'academic-activities') return <Viz4Shader paused={false} />;
   return (
     <div className="w-full h-full bg-white flex items-center justify-center">
       <div className="text-xs text-gray-500 uppercase tracking-wider">Preview</div>
@@ -237,84 +228,30 @@ function VizShader({ id, paused }: { id: string; paused: boolean }) {
   );
 }
 
-export function VizCard({ viz, isExpanded, onToggle }: Props) {
-  // NOTE: the shader wrapper below stays at the exact same position in the JSX
-  // tree, and keeps the same element types, whether the card is collapsed or
-  // expanded. That's deliberate - if collapsed/expanded rendered totally
-  // different subtrees (as an earlier version did), React would unmount and
-  // remount the shader (and its WebGL context) on every click, which raced
-  // with the in-flight layout animation and produced wrong/garbage sizing.
-  // Only className/style on the wrapper changes; the canvas itself is never
-  // torn down, and a ResizeObserver inside each shader keeps it correctly
-  // sized as its wrapper's CSS size changes.
-  //
-  // The whileInView entrance fade and the click-driven layout animation are
-  // deliberately split across two elements (outer/inner). Putting both
-  // `layout` and `whileInView`/`initial` on the same motion component makes
-  // Framer Motion re-run the entrance animation (opacity back to 0) whenever
-  // a layout animation happens, which is not what we want here.
+export function VizCard({ viz }: Props) {
   return (
     <motion.div
-      className="w-full"
+      className="w-full relative overflow-hidden bg-white border border-gray-200 rounded-sm"
       initial={{ y: 8, opacity: 0 }}
       whileInView={{ y: 0, opacity: 1 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >
-      <motion.div
-        layout
-        onClick={() => {
-          // Dragging across the description text to select-and-copy it also
-          // fires a click when the mouse is released - without this check
-          // that click toggled the box closed right as the user finished
-          // selecting, before they could copy anything.
-          if (typeof window !== 'undefined' && window.getSelection()?.toString()) {
-            return;
-          }
-          onToggle(viz.id);
-        }}
-        className="group w-full text-left focus-ring cursor-pointer relative overflow-hidden bg-white transition-colors border border-gray-200 rounded-sm"
-        style={isExpanded ? undefined : { height: 96 }}
-        transition={{ layout: { duration: 0.35, ease: 'easeInOut' } }}
-      >
-      <div className={isExpanded ? 'flex items-center' : 'absolute inset-0 flex'}>
-        <div className={isExpanded ? 'w-1/2 flex flex-col justify-center px-4 py-4' : 'w-1/2 flex flex-col justify-start px-4 py-4'}>
-          <span
-            className={
-              isExpanded
-                ? 'text-lg font-futura font-normal tracking-wider text-black uppercase text-left mb-4'
-                : 'text-lg font-futura font-normal tracking-wider text-black uppercase text-left'
-            }
-          >
+      <div className="flex items-center">
+        <div className="w-1/2 flex flex-col justify-center px-4 py-6">
+          <span className="text-lg font-futura font-normal tracking-wider text-black uppercase text-left mb-4">
             {viz.title}
           </span>
-          {isExpanded && (
-            <div className="text-sm text-gray-600 leading-relaxed cursor-text">
-              <VizDescription id={viz.id} />
-            </div>
-          )}
+          <div className="text-sm text-gray-600 leading-relaxed">
+            <VizDescription id={viz.id} />
+          </div>
         </div>
-        <div
-          className={
-            isExpanded
-              ? 'w-1/2 flex items-center justify-center px-4 py-4'
-              : 'w-1/2 h-full flex-shrink-0 relative overflow-hidden bg-transparent'
-          }
-          style={isExpanded ? undefined : { filter: 'grayscale(100%)' }}
-        >
-          <div
-            className="relative"
-            style={
-              isExpanded
-                ? { width: '100%', maxWidth: 480, aspectRatio: '1 / 1', margin: '0 auto' }
-                : { position: 'absolute', left: 0, right: 0, top: '50%', transform: 'translateY(-50%)', width: '100%', height: '384px' }
-            }
-          >
-            <VizShader id={viz.id} paused={!isExpanded} />
+        <div className="w-1/2 flex items-center justify-center px-4 py-6">
+          <div className="relative" style={{ width: '100%', maxWidth: 480, aspectRatio: '1 / 1', margin: '0 auto' }}>
+            <VizShader id={viz.id} />
           </div>
         </div>
       </div>
-      </motion.div>
     </motion.div>
   );
 }
