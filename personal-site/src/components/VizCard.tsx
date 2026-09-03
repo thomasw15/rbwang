@@ -68,9 +68,9 @@ const PAPERS: {
     title: 'Pattern Problems related to the Arithmetic Kakeya Conjecture',
     href: 'https://arxiv.org/abs/2011.07056',
     coauthors: [
-      { name: 'Charlie Cowen-Breen', href: 'https://arxiv.org/search/math?searchtype=author&query=Cowen-Breen,+C' },
-      { name: 'Elene Karangozishvili', href: 'https://arxiv.org/search/math?searchtype=author&query=Karangozishvili,+E' },
-      { name: 'Narmada Varadarajan', href: 'https://arxiv.org/search/math?searchtype=author&query=Varadarajan,+N' },
+      { name: 'Charlie Cowen-Breen' },
+      { name: 'Elene Karangozishvili' },
+      { name: 'Narmada Varadarajan' },
     ],
     venue: 'Preprint',
   },
