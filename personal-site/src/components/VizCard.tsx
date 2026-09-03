@@ -1,9 +1,11 @@
 "use client";
 import { motion } from 'framer-motion';
-import { SimpleShader } from './SimpleShader';
-import { Viz1Shader } from './Viz1Shader';
-import { Viz2Shader } from './Viz2Shader';
-import { Viz4Shader } from './Viz4Shader';
+// The shader visualizations (SimpleShader, Viz1Shader, Viz2Shader,
+// Viz4Shader) are deliberately not imported here anymore - the site is
+// text-only for now, but the shader components themselves are untouched
+// in src/components/ and still wired up via VizCard's git history
+// (see the "Switch from click-to-expand..." commit and earlier) if this
+// version wants them back later.
 
 export type Viz = {
   id: string;
@@ -216,18 +218,6 @@ function VizDescription({ id }: { id: string }) {
   );
 }
 
-function VizShader({ id }: { id: string }) {
-  if (id === 'research') return <SimpleShader paused={false} />;
-  if (id === 'papers') return <Viz2Shader paused={false} />;
-  if (id === 'talks') return <Viz1Shader paused={false} />;
-  if (id === 'academic-activities') return <Viz4Shader paused={false} />;
-  return (
-    <div className="w-full h-full bg-white flex items-center justify-center">
-      <div className="text-xs text-gray-500 uppercase tracking-wider">Preview</div>
-    </div>
-  );
-}
-
 export function VizCard({ viz }: Props) {
   return (
     <motion.div
@@ -237,19 +227,12 @@ export function VizCard({ viz }: Props) {
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >
-      <div className="flex items-center">
-        <div className="w-1/2 flex flex-col justify-center px-4 py-6">
-          <span className="text-lg font-futura font-normal tracking-wider text-black uppercase text-left mb-4">
-            {viz.title}
-          </span>
-          <div className="text-sm text-gray-600 leading-relaxed">
-            <VizDescription id={viz.id} />
-          </div>
-        </div>
-        <div className="w-1/2 flex items-center justify-center px-4 py-6">
-          <div className="relative" style={{ width: '100%', maxWidth: 480, aspectRatio: '1 / 1', margin: '0 auto' }}>
-            <VizShader id={viz.id} />
-          </div>
+      <div className="w-full flex flex-col justify-center px-4 py-6">
+        <span className="text-lg font-futura font-normal tracking-wider text-black uppercase text-left mb-4">
+          {viz.title}
+        </span>
+        <div className="text-sm text-gray-600 leading-relaxed">
+          <VizDescription id={viz.id} />
         </div>
       </div>
     </motion.div>
