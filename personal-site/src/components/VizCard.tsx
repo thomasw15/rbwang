@@ -26,35 +26,52 @@ type Props = {
 // history and are good candidate content for the future Papers section -
 // they were dropped here rather than guessed into place, since real
 // content for each section is being filled in step by step.
-const PAPERS = [
+type Coauthor = { name: string; href?: string };
+
+const PAPERS: {
+  title: string;
+  href: string;
+  coauthors: Coauthor[];
+  venue: string;
+}[] = [
   {
     title: 'The Grassmannian of Indefinite Subspaces',
     href: '/rbwang/papers/indefinite-grassmannian.pdf',
+    coauthors: [{ name: 'Lek-Heng Lim' }, { name: 'Hongquan Yang' }],
     venue: 'Preprint',
   },
   {
     title: 'Linear Representations of Manifolds',
     href: 'https://arxiv.org/abs/2605.14013',
+    coauthors: [{ name: 'Lek-Heng Lim' }, { name: 'Ke Ye' }],
     venue: 'Preprint',
   },
   {
     title: 'Generalized Matrix Nearness Problems II',
     href: 'https://arxiv.org/abs/2605.30181',
+    coauthors: [{ name: 'Chi-Kwong Li' }, { name: 'Lek-Heng Lim' }],
     venue: 'Preprint',
   },
   {
     title: 'Summing Divergent Matrix Series',
     href: 'https://link.springer.com/article/10.1007/s00211-025-01493-4',
+    coauthors: [{ name: 'Jungho Lee' }, { name: 'Lek-Heng Lim' }],
     venue: 'Numerische Mathematik (2025)',
   },
   {
     title: 'Geometric Programming for 3D Circuits',
     href: 'https://arxiv.org/abs/2504.01090',
+    coauthors: [{ name: 'Lek-Heng Lim' }],
     venue: 'Preprint',
   },
   {
     title: 'Pattern Problems related to the Arithmetic Kakeya Conjecture',
     href: 'https://arxiv.org/abs/2011.07056',
+    coauthors: [
+      { name: 'Charlie Cowen-Breen', href: 'https://arxiv.org/search/math?searchtype=author&query=Cowen-Breen,+C' },
+      { name: 'Elene Karangozishvili', href: 'https://arxiv.org/search/math?searchtype=author&query=Karangozishvili,+E' },
+      { name: 'Narmada Varadarajan', href: 'https://arxiv.org/search/math?searchtype=author&query=Varadarajan,+N' },
+    ],
     venue: 'Preprint',
   },
 ];
@@ -145,6 +162,8 @@ function VizDescription({ id }: { id: string }) {
     );
   }
   if (id === 'papers') {
+    const linkClass =
+      'text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800';
     return (
       <ul className="list-disc pl-5 space-y-3 marker:text-gray-400">
         {PAPERS.map((paper) => (
@@ -153,11 +172,27 @@ function VizDescription({ id }: { id: string }) {
               href={paper.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-sans text-[14px] leading-relaxed text-gray-800 underline decoration-gray-400 underline-offset-2 transition-colors hover:text-black hover:decoration-gray-800"
+              className={`font-sans text-[14px] leading-relaxed ${linkClass}`}
             >
               {paper.title}
             </a>
-            <span className="block font-sans text-xs text-gray-500 mt-0.5">{paper.venue}</span>
+            <span className="block font-sans text-xs text-gray-500 mt-0.5">
+              with{' '}
+              {paper.coauthors.map((coauthor, i) => (
+                <span key={coauthor.name}>
+                  {i > 0 && (paper.coauthors.length > 2 ? ', ' : ' ')}
+                  {i > 0 && i === paper.coauthors.length - 1 && 'and '}
+                  {coauthor.href ? (
+                    <a href={coauthor.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                      {coauthor.name}
+                    </a>
+                  ) : (
+                    coauthor.name
+                  )}
+                </span>
+              ))}
+              , <span className="italic">{paper.venue}</span>
+            </span>
           </li>
         ))}
       </ul>
