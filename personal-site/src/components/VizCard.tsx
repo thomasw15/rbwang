@@ -36,7 +36,7 @@ const PAPERS: {
 }[] = [
   {
     title: 'The Grassmannian of Indefinite Subspaces',
-    href: '/rbwang/papers/indefinite-grassmannian.pdf',
+    href: 'https://arxiv.org/abs/2608.30249',
     coauthors: [{ name: 'Lek-Heng Lim' }, { name: 'Hongquan Yang' }],
     venue: 'Preprint',
   },
