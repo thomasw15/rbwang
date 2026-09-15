@@ -35,6 +35,12 @@ const PAPERS: {
   venue: string;
 }[] = [
   {
+    title: 'Singular Value Decomposition of Unbounded Operators',
+    href: 'https://arxiv.org/abs/2609.15076',
+    coauthors: [{ name: 'Haoming Wang' }, { name: 'Lek-Heng Lim' }],
+    venue: 'Preprint',
+  },
+  {
     title: 'The Grassmannian of Indefinite Subspaces',
     href: 'https://arxiv.org/abs/2608.30249',
     coauthors: [{ name: 'Lek-Heng Lim' }, { name: 'Hongquan Yang' }],
