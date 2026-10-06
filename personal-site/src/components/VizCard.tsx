@@ -35,6 +35,12 @@ const PAPERS: {
   venue: string;
 }[] = [
   {
+    title: 'When is the Clifford hierarchy generalized semi-Clifford?',
+    href: 'https://arxiv.org/abs/2610.06402',
+    coauthors: [{ name: 'Bobby Zixuan Zhang' }],
+    venue: 'Preprint',
+  },
+  {
     title: 'Singular Value Decomposition of Unbounded Operators',
     href: 'https://arxiv.org/abs/2609.15076',
     coauthors: [{ name: 'Haoming Wang' }, { name: 'Lek-Heng Lim' }],
