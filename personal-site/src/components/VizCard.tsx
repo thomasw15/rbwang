@@ -35,6 +35,12 @@ const PAPERS: {
   venue: string;
 }[] = [
   {
+    title: 'No closed-form formula for Stiefel geodesics',
+    href: 'https://arxiv.org/abs/2610.37568',
+    coauthors: [{ name: 'Lek-Heng Lim' }],
+    venue: 'Preprint',
+  },
+  {
     title: 'When is the Clifford hierarchy generalized semi-Clifford?',
     href: 'https://arxiv.org/abs/2610.06402',
     coauthors: [{ name: 'Bobby Zixuan Zhang' }],
