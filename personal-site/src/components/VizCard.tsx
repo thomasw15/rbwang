@@ -102,6 +102,11 @@ const TALKS = [
     date: 'January 2027',
   },
   {
+    title: 'Geometric and Algebraic Foundations of Deep Learning',
+    venue: 'SIAM MDS 2026',
+    date: 'November 2026',
+  },
+  {
     title: 'Symmetries in Computations',
     venue: 'Mathematics Colloquium, William & Mary',
     date: 'September 2026',
