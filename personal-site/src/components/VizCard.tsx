@@ -102,8 +102,8 @@ const TALKS = [
     date: 'January 2027',
   },
   {
-    title: 'Geometric and Algebraic Foundations of Deep Learning',
-    venue: 'SIAM MDS 2026',
+    title: 'Linear Representations of Manifolds',
+    venue: 'Geometric and Algebraic Foundations of Deep Learning, SIAM MDS 2026',
     date: 'November 2026',
   },
   {
