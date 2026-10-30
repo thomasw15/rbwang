@@ -225,7 +225,7 @@ function VizDescription({ id }: { id: string }) {
     return (
       <ul className="list-disc pl-5 space-y-3 marker:text-gray-400">
         {TALKS.map((talk) => (
-          <li key={talk.title}>
+          <li key={`${talk.title}-${talk.date}`}>
             <span className="font-sans text-[14px] leading-relaxed text-gray-800">{talk.title}</span>
             <span className="block font-sans text-xs text-gray-500 mt-0.5">
               {talk.venue} &mdash; {talk.date}
