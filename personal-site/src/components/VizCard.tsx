@@ -107,6 +107,11 @@ const TALKS = [
     date: 'November 2026',
   },
   {
+    title: 'Linear Representations of Manifolds',
+    venue: 'Algebra, Geometry and Combinatorics Day, UIUC',
+    date: 'November 2026',
+  },
+  {
     title: 'Symmetries in Computations',
     venue: 'Mathematics Colloquium, William & Mary',
     date: 'September 2026',
@@ -120,6 +125,11 @@ const TALKS = [
     title: 'A Ten-fold Way of Matrix Decompositions',
     venue: 'Midwest Numerical Analysis Day, University of Notre Dame',
     date: 'April 2026',
+  },
+  {
+    title: 'Submanifold Optimization: A Complete Classification',
+    venue: 'Discrete Exterior Calculus, Institute for Mathematical and Statistical Innovation',
+    date: 'September 2025',
   },
   {
     title: 'Summing Divergent Matrix Series',
@@ -225,7 +235,7 @@ function VizDescription({ id }: { id: string }) {
     return (
       <ul className="list-disc pl-5 space-y-3 marker:text-gray-400">
         {TALKS.map((talk) => (
-          <li key={`${talk.title}-${talk.date}`}>
+          <li key={`${talk.title}-${talk.venue}-${talk.date}`}>
             <span className="font-sans text-[14px] leading-relaxed text-gray-800">{talk.title}</span>
             <span className="block font-sans text-xs text-gray-500 mt-0.5">
               {talk.venue} &mdash; {talk.date}
