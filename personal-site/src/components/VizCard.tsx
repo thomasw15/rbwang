@@ -97,6 +97,11 @@ const PAPERS: {
 // Reverse-chronological, matching the Papers list.
 const TALKS = [
   {
+    title: 'Matrix Nearness Problems via Lie Algebras',
+    venue: 'Advances in Matrix Nearness Problems, SIAM LA 2027',
+    date: 'May 2027',
+  },
+  {
     title: 'Linear Representations of Manifolds',
     venue: 'Matrix Analysis and Applications, JMM 2027',
     date: 'January 2027',
