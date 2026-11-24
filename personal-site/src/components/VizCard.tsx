@@ -35,6 +35,12 @@ const PAPERS: {
   venue: string;
 }[] = [
   {
+    title: 'Matrix Nearness Problems via Lie Algebra',
+    href: 'https://arxiv.org/abs/2611.28046v1',
+    coauthors: [],
+    venue: 'Preprint',
+  },
+  {
     title: 'No Closed-Form Formula for Stiefel Geodesics',
     href: 'https://arxiv.org/abs/2610.37568',
     coauthors: [{ name: 'Lek-Heng Lim' }],
@@ -215,21 +221,26 @@ function VizDescription({ id }: { id: string }) {
               {paper.title}
             </a>
             <span className="block font-sans text-xs text-gray-500 mt-0.5">
-              with{' '}
-              {paper.coauthors.map((coauthor, i) => (
-                <span key={coauthor.name}>
-                  {i > 0 && (paper.coauthors.length > 2 ? ', ' : ' ')}
-                  {i > 0 && i === paper.coauthors.length - 1 && 'and '}
-                  {coauthor.href ? (
-                    <a href={coauthor.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                      {coauthor.name}
-                    </a>
-                  ) : (
-                    coauthor.name
-                  )}
-                </span>
-              ))}
-              , <span className="italic">{paper.venue}</span>
+              {paper.coauthors.length > 0 && (
+                <>
+                  with{' '}
+                  {paper.coauthors.map((coauthor, i) => (
+                    <span key={coauthor.name}>
+                      {i > 0 && (paper.coauthors.length > 2 ? ', ' : ' ')}
+                      {i > 0 && i === paper.coauthors.length - 1 && 'and '}
+                      {coauthor.href ? (
+                        <a href={coauthor.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                          {coauthor.name}
+                        </a>
+                      ) : (
+                        coauthor.name
+                      )}
+                    </span>
+                  ))}
+                  {', '}
+                </>
+              )}
+              <span className="italic">{paper.venue}</span>
             </span>
           </li>
         ))}
